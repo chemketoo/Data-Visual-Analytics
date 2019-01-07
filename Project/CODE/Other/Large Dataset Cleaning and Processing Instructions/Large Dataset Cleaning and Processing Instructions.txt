@@ -1,0 +1,20 @@
+Instructions for Processing the Large Electronics Data Set
+1.Download the Electronics.txt.gz dataset from https://snap.stanford.edu/data/web-Amazon.html
+2.Contact Julian McAuley (julian.mcauley@gmail.com) to obtain a link to the data set.
+3.The raw dataset will be in the json format. Use http://convertcsv.com/json-to-csv.htm to convert the dataset from Jason to csv. 
+4.Since the raw dataset is large, use  https://blog.sqlizer.io/posts/convert-csv-to-sql/ to convert the csv to SQL database. This process will take approximately an hour to be completed. 
+5.Install DB Browser for SQLite from this website https://sqlitebrowser.org/  to work with the SQL database. 
+
+The following data cleaning should be done in SQL: 
+6.Open the database in DB Browser for SQLite. 
+7.In the dataset, remove the following columns: reviewerName, helpful, unixReviewTime, and reviewTime. 
+8.Rename the overall column as  overall_ratings.
+9.Include a new column called product_name. This column will contain the product names derived from the asin number. 
+10.Use https://asinscope.com/large-scale-conversion and select Large Scale. With the help of this website you can get the product names based on the asin numbers for the large data set. 
+
+Connecting RStudio to the SQL Server: 
+11.You can connect to SQL Server directly from R using at least 4 libraries (RODBC, rsqlserver, RSQLServer, RJDBC).
+12.Refer to the instructions in the Rstudio website to set up your connection: https://db.rstudio.com/databases/microsoft-sql-server/. 
+
+
+
