@@ -1,28 +1,5 @@
 DESCRIPTION:
-Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. 
-Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
-
-Word Count Visualization: 
-The most frequently used words in the dataset tab allows users to view the most frequently used words in the data set. 
-Users can select how many words to view in the list and which words to view.
-
-Top words used by product specification tab allows users to use an interactive table to filter, sort, or search for a specific product in the search boxes. 
-For example, if you paste B00000J1V5 in the asin search box, you will find the list of all the tokenized words and its counts associated with the user review. 
-In the bottom 'Showing 1 to 10 of 753 entries filtered from 12,328 total entries', you will find the total number of tokenized words associated for that particular product.
-
-The word count bar chart tab shows a bar chart by asin of the top words used for that asin.
-
-The word cloud tab is an interactive interface for users to create a word cloud by specifying the minimum frequency of the words used in the cloud and 
-the maximum number of words for building the cloud.
-
-Sentiment Analysis:
-This section contains multiple tabs for users to interact and view the analysis of the sentiment of reviews. 
-There are tables, charts, and many types of graphs the user can explore to obtain a better picture of the actual sentiment of a reviewer or for a product.
-
-Topic Models:
-This section contains the Latent Dirichlet Allocation (LDA) visualization.  The user selects the number of topics (each produces a horizontal bar chart) 
-and the number of words (up to 10) on each graph, giving the user an idea of the most frequently used words in the reviews.
-
+Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
 
 INSTALLATION:
 Prerequisites
@@ -56,7 +33,6 @@ To Install RStudio:
 1. Go to www.rstudio.com and click on the "Download RStudio" button.
 2. Click on "Download RStudio Desktop."
 3. Click on the version recommended for your system, or the latest Mac version, save the .dmg file on your computer, double-click it to open, and then drag and drop it to your applications folder.
-
 
 EXECUTION:
 Team 16 Web App Instructions:
