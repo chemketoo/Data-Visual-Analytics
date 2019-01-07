@@ -1,9 +1,8 @@
-﻿DESCRIPTION:
+DESCRIPTION:
 Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. 
 Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
 
 Word Count Visualization: 
-
 The most frequently used words in the dataset tab allows users to view the most frequently used words in the data set. 
 Users can select how many words to view in the list and which words to view.
 
@@ -17,18 +16,15 @@ The word cloud tab is an interactive interface for users to create a word cloud 
 the maximum number of words for building the cloud.
 
 Sentiment Analysis:
-
 This section contains multiple tabs for users to interact and view the analysis of the sentiment of reviews. 
 There are tables, charts, and many types of graphs the user can explore to obtain a better picture of the actual sentiment of a reviewer or for a product.
 
 Topic Models:
-
 This section contains the Latent Dirichlet Allocation (LDA) visualization.  The user selects the number of topics (each produces a horizontal bar chart) 
 and the number of words (up to 10) on each graph, giving the user an idea of the most frequently used words in the reviews.
 
 
 INSTALLATION:
-
 Prerequisites
 • In order to run our application, you will need to install R and R studio on your computer. Install the latest version of RStudio. 
 R and RStudio Installation Instructions 
@@ -63,7 +59,6 @@ To Install RStudio:
 
 
 EXECUTION:
-
 Team 16 Web App Instructions:
 1. Unzip team16final folder and go to CODE.
 2. Open server.R and ui.R. 
