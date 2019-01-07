@@ -1,0 +1,16 @@
+c(i)
+488 choices
+
+c(ii)
+value.replace(/\,.*$/, "")
+
+c(iii)
+nominal: columnH 
+ordinal: columnE
+
+c(iv)
+value.contains(/GA/)
+
+c(v)
+value.replace(/http:\/./, "")
+value.replace(/https:\/./, "")
