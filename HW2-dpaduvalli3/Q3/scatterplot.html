@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<title>Q3 dpaduvalli3</title>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="../lib/d3.v3.min.js""></script>
+<style type="text/css">
+.axis path,
+.axis line{
+stroke: black;
+fill: none;
+shape-rendering: crispEdges;}
+.axis text{font-size: 13px;}
+text {font-family: sans-serif;}       
+.legend {font-size: 13px;}      
+.pagebreak {page-break-before: always;}} 
+
+</style>
+</head>
+<body>
+<script type="text/javascript">
+d3.csv("movies.csv",function(Movies){
+
+var dataset1=[]
+var negativedataset1=[]
+var positivedataset1=[]
+var dataset2=[]
+var negativedataset2=[]
+var positivedataset2=[]
+
+Movies.forEach(function(d){
+d.imdbRating = parseFloat(d.imdbRating);
+d.WinsNoms =  parseFloat(d.WinsNoms);
+dataset1.push(d);
+if(d.IsGoodRating == '0'){
+negativedataset1.push(d);
+}
+else{
+positivedataset1.push(d);
+}
+})
+
+Movies.forEach(function(d){
+d.imdbRating = parseFloat(d.imdbRating);
+d.Budget = parseFloat(d.Budget);
+dataset2.push(d);
+if(d.class=="0"){
+negativedataset2.push(d);
+}
+else{
+positivedataset2.push(d);
+}
+})
+
+var legend=["negative","positive"];
+var w = 800;
+var h = 500;
+var padding = 40;
+var margin= {top:40 , bottom:100, left:50, right:50};
+var width = w - margin.left - margin.right
+var height = h - margin.top - margin.bottom
+var symbolStrokeWidth = 0.5
+
+//Define Scales for x and y axis
+
+var imdbScale1 = d3.scale.linear()
+.domain([ 0, d3.max(dataset1,function(d){return d.imdbRating;})])
+.range([padding, w - padding ]).nice();
+var winsNomsScale1 = d3.scale.linear()
+.domain([d3.min(dataset1,function(d){
+return d.WinsNoms;
+}),d3.max(dataset1,function(d){return d.WinsNoms;})])
+
+
+.range([h - padding,padding ]).nice();  
+
+var budgetScale1 = d3.scale.linear()
+.domain([d3.min(dataset2,function(d){
+return d.Budget;
+}),d3.max(dataset2,function(d){return d.Budget;})])
+
+
+.range([h - padding,padding ]).nice(); 
+
+var votesrScale= d3.scale.linear()
+.domain([d3.min(dataset1,function(d){return d.WinsNoms;}),d3.max(dataset1,function(d){return d.WinsNoms;})])       
+.range([30, 200])
+; 
+
+var imdbVotesyScale3 = d3.scale.linear()
+.domain([d3.min(dataset1,function(d){
+return parseInt(d.imdbVotes);
+}),d3.max(dataset1,function(d){return parseInt(d.imdbVotes);})])     
+.range([h - padding,padding ]).nice();
+
+var winsNomsScaleRtSqr = d3.scale.sqrt()
+.domain([d3.min(dataset1,function(d){
+return d.WinsNoms;
+}),d3.max(dataset1,function(d){return d.WinsNoms;})])
+.range([h - padding,padding ]).nice(); 
+
+var winsNomsScalelog = d3.scale.log()
+.clamp(true)
+.domain([0.001,d3.max(dataset1,function(d){return d.WinsNoms;})])      
+.range([h - padding,padding ]).nice(); 
+
+//Define Axis
+var imdbRating_Axis1 = d3.svg.axis().scale(imdbScale1).orient("bottom") .ticks(5);
+var winsNoms_Axis1 = d3.svg.axis().scale(winsNomsScale1) .orient("left").ticks(5); 
+var budgetAxis2 = d3.svg.axis().scale(budgetScale1).orient("left").ticks(5).tickFormat(d3.format(".2s")); 
+var imdbVotesAxis3 = d3.svg.axis().scale(imdbVotesyScale3).orient("left").ticks(5).tickFormat(d3.format(".2s")); 
+var winsNomsSquareRoot = d3.svg.axis().scale(winsNomsScaleRtSqr) .orient("left") .ticks(5); 
+var winsNomsLog = d3.svg.axis().scale(winsNomsScalelog).orient("left").ticks(5); 
+
+//Plot the five scatterplots
+var svg1 =d3.select("body")
+.append("svg")                        
+.attr("width", w)
+.attr("height", h)
+.attr("transform","translate("+ margin.left+ "," + margin.top + ")")
+
+svg1.append("text")
+.attr("transform","translate("+200+","+15+")")
+.text("Wins+Nominations vs. IMDb Rating")
+.style("font-weight","bold")
+.attr("font-size","20");                   
+
+//circle for legend                    
+svg1.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform", "translate("+730+","+50+")")
+.attr("stroke","red")
+.attr("fill","none");
+
+svg1.append("text")
+.attr("transform","translate("+740+","+55+")")
+.text("Negative")
+.attr("class", "legend");  
+
+//cross for legend
+svg1.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform", "translate("+730+","+80+")")
+.attr("stroke","blue")
+.attr("fill","none");
+
+svg1.append("text")
+.attr("transform", "translate("+740+","+85+")")
+.text("Positive")
+.attr("class", "legend"); 
+
+svg1.selectAll("circles")
+.data(negativedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScale1(d.WinsNoms)+")";})
+.attr("stroke", "red")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg1.selectAll("cross")
+.data(positivedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScale1(d.WinsNoms)+")";})
+.attr("stroke", "blue ")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");       
+
+svg1.append("g")
+.attr("class", "axis")
+.attr("stroke-width","1px")
+.attr("transform", "translate(0, " + (h-(padding-5)) + ")")
+.call(imdbRating_Axis1)
+.append("text")
+.attr("class", "label")
+.attr("x", w-5)
+.attr("y", 30)
+.text("IMDb Rating")
+.style("font-size","18")
+.style("text-anchor", "end");
+
+svg1.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(" + padding + ", 5)")
+.call(winsNoms_Axis1)
+.append("text")
+.text("Wins+Noms")
+.attr("class", "label")
+.attr("x", 37)
+.attr("y", 20)
+.style("font-size","18")
+.style("text-anchor", "end");
+
+document.body.innerHTML += '<div style="page-break-before: always;"></div>';
+document.body.innerHTML += '<br><br><br>';
+document.body.innerHTML += '<br><br><br>';
+
+var svg2 = d3.select("body")
+.append("svg")                        
+.attr("width", w)
+.attr("height", h)
+.attr("transform","translate("+ margin.left+ "," + margin.top + ")") 
+
+svg2.append("text")
+.attr("transform","translate("+300+","+15+")")
+.text("Budget vs. IMDb Rating")
+.style("font-weight","bold")
+.attr("font-size","20"); 
+
+//circle for legend                    
+svg2.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform", "translate("+730+","+50+")")
+.attr("stroke","red")
+.attr("fill","none");
+svg2.append("text")
+.attr("transform","translate("+740+","+55+")")
+.text("Negative")
+.attr("class", "legend");  
+
+//cross for legend
+svg2.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform", "translate("+730+","+80+")")
+.attr("stroke","blue")
+.attr("fill","none");
+svg2.append("text")
+.attr("transform", "translate("+740+","+85+")")
+.text("Positive")
+.attr("class", "legend");
+
+svg2.selectAll("circles")
+.data(negativedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+budgetScale1(d.Budget)+")";})
+.attr("stroke", "red")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg2.selectAll("cross")
+.data(positivedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+budgetScale1(d.Budget)+")";})
+.attr("stroke", "blue ")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");   
+
+
+svg2.append("g")
+.attr("class", "axis")
+.attr("stroke-width","1px")
+.attr("transform", "translate(0, " + (h-(padding-5)) + ")")
+.call(imdbRating_Axis1)
+.append("text")
+.attr("class", "label")
+.attr("x", w-5)
+.attr("y", 30)
+.text("IMDb Rating")
+.style("font-size","18")
+.style("text-anchor", "end");
+
+svg2.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(" + padding + ", 5)")
+.call(budgetAxis2)
+.append("text")
+.text("Budget")
+.attr("class", "label")
+.attr("x", 15)
+.attr("y", 20)
+.style("font-size","18")
+.style("text-anchor", "end");
+document.body.innerHTML += '<div style="page-break-before: always;"></div>';
+document.body.innerHTML += '<br><br><br>';
+document.body.innerHTML += '<br><br><br>';
+
+var svg3 = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h)
+.attr("transform","translate("+ margin.left+ "," + margin.top + ")")
+
+svg3.append("text")
+.attr("transform","translate("+160+","+15+")")
+.text("Votes vs. IMDb Rating sized by Wins+Nominations")
+.style("font-weight","bold")
+.attr("font-size","20"); 
+
+//circle for legend                    
+svg3.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform", "translate("+730+","+10+")")
+.attr("stroke","red")
+.attr("fill","none");
+svg3.append("text")
+.attr("transform","translate("+740+","+15+")")
+.text("Negative")
+.attr("class", "legend");  
+
+//cross for legend
+svg3.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform", "translate("+730+","+30+")")
+.attr("stroke","blue")
+.attr("fill","none");
+svg3.append("text")
+.attr("transform", "translate("+740+","+35+")")
+.text("Positive")
+.attr("class", "legend");
+
+svg3.selectAll("circles")
+.data(negativedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(function(d){return votesrScale(d.WinsNoms);}))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+imdbVotesyScale3(d.imdbVotes)+")";})
+.attr("stroke", "red")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+
+svg3.selectAll("cross")
+.data(positivedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(function(d){return votesrScale(d.WinsNoms);}))                     
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+imdbVotesyScale3(d.imdbVotes)+")";})
+.attr("stroke", "blue ")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg3.append("g")
+.attr("class", "axis")
+.attr("stroke-width","1px")
+.attr("transform", "translate(0, " + (h-(padding-5)) + ")")
+.call(imdbRating_Axis1)
+.append("text")
+.attr("class", "label")
+.attr("x", w-5)
+.attr("y", 30)
+.text("IMDb Rating")
+.style("font-size","18")
+.style("text-anchor", "end");
+
+svg3.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(" + padding + ", 5)")
+.call(imdbVotesAxis3)
+.append("text")
+.text("IMDb Votes")
+.attr("class", "label")
+.attr("x", 37)
+.attr("y", 20)
+.style("font-size","18")
+.style("text-anchor", "end"); 
+
+document.body.innerHTML += '<div style="page-break-before: always;"></div>';
+document.body.innerHTML += '<br><br><br>';
+document.body.innerHTML += '<br><br><br>';
+
+
+var svg4 = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h)
+.attr("transform","translate("+ margin.left+ "," + margin.top + ")")
+
+svg4.append("text")
+.attr("transform","translate("+150+","+15+")")
+.text("Wins+Nominations (square-root-scaled) vs. IMDb Rating")
+.style("font-weight","bold")
+.attr("font-size","20"); 
+
+
+//circle for legend                    
+svg4.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform", "translate("+730+","+50+")")
+.attr("stroke","red")
+.attr("fill","none");
+svg4.append("text")
+.attr("transform","translate("+740+","+55+")")
+.text("Negative")
+.attr("class", "legend");  
+
+//cross for legend
+svg4.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform", "translate("+730+","+80+")")
+.attr("stroke","blue")
+.attr("fill","none");
+svg4.append("text")
+.attr("transform", "translate("+740+","+85+")")
+.text("Positive")
+.attr("class", "legend");
+
+svg4.selectAll("circles")
+.data(negativedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScaleRtSqr(d.WinsNoms)+")";})
+.attr("stroke", "red")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg4.selectAll("cross")
+.data(positivedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScaleRtSqr(d.WinsNoms)+")";})
+.attr("stroke", "blue ")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg4.append("g")
+.attr("class", "axis")
+.attr("stroke-width","1px")
+.attr("transform", "translate(0, " + (h-(padding-5)) + ")")
+.call(imdbRating_Axis1)
+.append("text")
+.attr("class", "label")
+.attr("x", w-5)
+.attr("y", 30)
+.text("IMDb Rating")
+.style("font-size","18")
+.style("text-anchor", "end");
+
+svg4.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(" + padding + ", 5)")
+.call(winsNomsSquareRoot)
+.append("text")
+.text("Wins+Noms")
+.attr("class", "label")
+.attr("x", 37)
+.attr("y", 20)
+.style("font-size","18")
+.style("text-anchor", "end");
+document.body.innerHTML += '<div style="page-break-before: always;"></div>';
+document.body.innerHTML += '<br><br><br>';
+document.body.innerHTML += '<br><br><br>';
+
+var svg5 = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h)
+.attr("transform","translate("+ margin.left+ "," + margin.top + ")")
+
+svg5.append("text")
+.attr("transform","translate("+200+","+15+")")
+.text("Wins+Nominations (log-scaled) vs. IMDb Rating")
+.style("font-weight","bold")
+.attr("font-size","20");  
+
+//circle for legend                    
+svg5.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform", "translate("+730+","+50+")")
+.attr("stroke","red")
+.attr("fill","none");
+svg5.append("text")
+.attr("transform","translate("+740+","+55+")")
+.text("Negative")
+.attr("class", "legend");  
+
+//cross for legend
+svg5.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform", "translate("+730+","+80+")")
+.attr("stroke","blue")
+.attr("fill","none");
+svg5.append("text")
+.attr("transform", "translate("+740+","+85+")")
+.text("Positive")
+.attr("class", "legend");
+
+svg5.selectAll("circles")
+.data(negativedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("circle").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScalelog(d.WinsNoms)+")";})
+.attr("stroke", "red")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg5.selectAll("cross")
+.data(positivedataset1)
+.enter()
+.append("path")
+.attr("d",d3.svg.symbol().type("cross").size(30))
+.attr("transform",function(d){return "translate("+imdbScale1(d.imdbRating)+","+winsNomsScalelog(d.WinsNoms)+")";})
+.attr("stroke", "blue ")
+.attr("stroke-width",symbolStrokeWidth)
+.attr("fill", "none");
+
+svg5.append("g")
+.attr("class", "axis")
+.attr("stroke-width","1px")
+.attr("transform", "translate(0, " + (h-(padding-5)) + ")")
+.call(imdbRating_Axis1)
+.append("text")
+.attr("class", "label")
+.attr("x", w-5)
+.attr("y", 30)
+.text("IMDb Rating")
+.style("font-size","18")
+.style("text-anchor", "end");
+
+svg5.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(" + padding + ", 5)")
+.call(winsNomsLog)
+.append("text")
+.text("Wins+Noms")
+.attr("class", "label")
+.attr("x", 37)
+.attr("y", 20)
+.style("font-size","18")
+.style("text-anchor", "end");
+document.body.innerHTML += '<br><br><br>';
+document.body.innerHTML += '<br><br><br>';
+
+});
+
+</script> 
+</body>
+</html>

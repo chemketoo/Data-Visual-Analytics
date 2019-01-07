@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+<title>Q5 dpaduvalli3</title>
+<style>
+
+div#bargraph .axis {
+font-family: "Arial", sans-serif;
+font-size: 18px;
+fill: #b0b5af;
+}
+div#bargraph body {
+font-family: "Arial", sans-serif;
+}
+
+#linegraph{    
+position:absolute;
+height: 275px;
+width: 300px;
+margin-left: 1000px;
+margin-top:0px;
+padding: 15px;
+overflow: auto;
+}
+
+div#bargraph .label {
+font-family: "Arial", sans-serif;
+font-size: 15px;
+fill: #ffffff;
+font-weight: bold;
+}
+div#linegraph path {
+stroke: #43a2ca;
+stroke-width: 2.5;
+fill: none;
+}
+
+#bargraph {
+height: 500px;
+width:1000px;
+margin-top: 20px;
+padding: 15px;
+overflow: auto;
+float:left;
+}
+
+div#linegraph
+.axis path,
+.axis line {
+fill: none;
+stroke: black;
+shape-rendering: crispEdges;
+}
+
+div#bargraph .axis path,
+.axis line {
+fill: none;
+display: none;
+}
+
+div#linegraph .axis text {
+font-family: sans-serif;
+font-size: 12px;
+}
+
+h1 {text-align:center; color: black;}
+</style>
+</head>
+
+<body>
+<h1>Interactive Visualization</h1>
+</body>
+
+<div id = "bargraph" ></div>
+
+<div id = "linegraph" ></div>
+
+<script src="../lib/d3.v3.min.js" charset="utf-8"></script>
+
+<script>
+
+var margin = {top: 25, right: 25, bottom: 25, left: 300},
+width = 850 - margin.left - margin.right,
+height = 450 - margin.top - margin.bottom;
+
+var   data= [{city: 'San Antonio', population_2012: 1383505, growth: {year_2013:25405, year_2014:26644 , year_2015:28593 , year_2016:23591 , year_2017:24208}},
+{city: 'New York', population_2012: 8383504, growth: {year_2013:75138 , year_2014:62493 , year_2015:61324 , year_2016:32967 , year_2017:7272}},
+{city: 'Chicago', population_2012: 2717989, growth: {year_2013:6493 , year_2014:2051 , year_2015:-1379 , year_2016:-4879 , year_2017:-3825}},
+{city: 'Los Angeles', population_2012: 3859267, growth:{year_2013:32516 , year_2014:30885 , year_2015:30791 , year_2016:27657 , year_2017:18643}},
+{city: 'Phoenix', population_2012: 1495880, growth: {year_2013:25302 , year_2014:26547 , year_2015:27310 , year_2016:27003 , year_2017:24036}}
+];
+
+data.forEach(function(d){d.city = d.city;d.amount = d.population_2012
+for(i in d.growth){d.amount+=d.growth[i]}});
+
+data = data.sort(function(a,b) {return d3.descending(a.amount, b.amount)});
+
+var x = d3.scale.linear()
+.range([width,0])
+.domain([0, d3.max(data, function(d) { return d.amount; })]);
+var y = d3.scale.ordinal()
+.rangeRoundBands([0,height], .05)
+.domain(data.map(function(d) { return d.city; }));
+
+var yaxisScale = d3.svg.axis()
+.scale(y)
+.orient("left");
+
+var svg = d3.select("#bargraph").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+.style("float","left");
+
+var barsgraph = svg.selectAll(".bar")
+.data(data)
+.enter()
+.append("g")
+
+var appendY = svg.append("g")
+.attr("class", "y axis")
+.call(yaxisScale)
+
+barsgraph.append("rect")
+.style("fill", "#b0b5af")
+.attr("x", 2)
+.attr("y", function(d) { return y(d.city)+6; })
+.attr("width", function(d){ return width - x(d.amount)})
+.attr("height", 50)
+.on("mouseover", function(s) {
+s.years = []
+s.growths = []
+
+data.forEach(function(da){
+
+if(s.city == da.city)
+{
+for(i in da.growth)
+{
+s.years.push(i);
+s.growths.push(da.growth[i]/(da.population_2012+ da.growth[i])*100)
+}
+}
+
+});
+d3.select(this).style("fill", "#99edf7");
+
+var m = [40, 40, 40, 40];
+var w = 300 - m[1] - m[3];
+var h = 250 - m[0] - m[2];
+
+var x_data = [2013, 2014, 2015, 2016, 2017]
+var x = d3.scale.linear().domain([0, x_data.length-1]).range([0, w]);
+
+var y = d3.scale.linear().domain([d3.min(s.growths), d3.max(s.growths)]).range([h, 0]);
+
+
+var line = d3.svg.line()
+.x(function(d,i) { return x(i); })
+.y(function(d) { return y(d); })
+lineGraph = d3.select("#linegraph")
+.append("svg:svg")
+.attr("width", w + m[1] + m[3])
+.attr("height", h + m[0] + m[2])
+.append("svg:g")
+.attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+var xAxis = d3.svg.axis().scale(x).ticks(4).orient("bottom")
+.tickFormat(function(d) {
+return x_data[d];})
+
+
+lineGraph.append("svg:g")
+.attr("class", "x axis")
+.attr("transform", "translate(0," + h + ")")
+.call(xAxis)
+.append("text")
+.attr("x",207)
+.style("text-anchor","bottom")
+.attr("dy", "2.8em")
+.text("Year")
+
+var yaxisScaleLeft = d3.svg.axis().scale(y).ticks(6).orient("left");
+
+lineGraph.append("svg:g")
+.attr("class", "y axis")
+.attr("transform", "translate(0,0)")
+.call(yaxisScaleLeft)
+.append("text")
+.attr("y",-10)
+.style("text-anchor","top")
+.attr("dx", "-2.5em")
+.text("Pct %")
+
+lineGraph.append("svg:path").attr("d", line(s.growths));})
+
+.on("mouseout", function() {
+d3.select(this).style("fill", "#b0b5af")
+d3.selectAll('#linegraph svg').remove(); })      
+
+
+var barsgraph = svg.selectAll(".bar")
+.data(data)
+.enter()
+barsgraph.append("text")
+.attr("class", "label")
+.attr("y", function (d) { return y(d.city) + y.rangeBand() / 2 + 4;})
+.attr("x", 10)
+.text(function (d) {return d3.format(',')(d.amount);})
+
+
+</script>
+</html>
