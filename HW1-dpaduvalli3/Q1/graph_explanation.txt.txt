@@ -1,6 +1,0 @@
-Used ForceAtlas to find relationship between movies
-Adjusted size to limit nodes & edge crossing 
-Used the Giant Component filter option to filter unconnected graphs 
-Calculated modularity and applied node partition to find clusters and set colors
-Calculated betweenness centrality and increased size and included labels for those nodes 
-

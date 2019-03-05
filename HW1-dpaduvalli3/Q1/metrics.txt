@@ -1,0 +1,7 @@
+-Average node degree = 1.554
+Shows the average number of edges per node. 
+-Diameter of the graph = 9
+Shows the longest of all the calculated shortest (geodesic) paths in a network. It represents the linear size of a network. Some directed graphs have non-reachable node pairs, in which case the diameter is undefined. 
+-Average path length = 2.797
+Shows the number of steps to get from one node to another node in a network. This is calculated by adding the shortest paths between all pair of nodes and dividing by total number of pairs. 
+
