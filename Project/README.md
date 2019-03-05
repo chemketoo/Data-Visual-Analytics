@@ -4,7 +4,7 @@ Our package allows users to evaluate and analyze the sentiment of product review
 # INSTALLATION
 Prerequisites
 • In order to run our application, you will need to install R and R studio on your computer. Install the latest version of RStudio. 
-R and RStudio Installation Instructions 
+R and RStudio Installation Instructions </ br>
 
 # Windows Users
 To Install R:
