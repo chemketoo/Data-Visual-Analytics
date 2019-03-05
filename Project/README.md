@@ -35,7 +35,7 @@ To Install RStudio:
 3. Click on the version recommended for your system, or the latest Mac version, save the .dmg file on your computer, double-click it to open, and then drag and drop it to your applications folder.
 
 # EXECUTION: Team 16 Web App Instructions
-1. Unzip team16final folder and go to CODE.
+1. Download the CODE folder.
 2. Open server.R and ui.R. 
 3. Ensure you set the working directory to the CODE Folder (this can be done by going to Session at the top and select Set Working Dirctory).
 4. In either server.R or ui.R, manually install shiny and magrittr packages (install button is on bottom right of the RStudio console).
