@@ -2,7 +2,7 @@
 Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
 
 # Installation
-Prerequisites: <br /> <br /> 
+Prerequisites: <br /> 
 In order to run our application, you will need to install R and R studio on your computer. Install the latest version of RStudio. 
 R and RStudio Installation Instructions.
 
@@ -43,5 +43,6 @@ Team 16 Web App Instructions:
 5. Next, click on Run App at the top right side of RStudio console (wait for a few seconds for the app to be rendered).
 6. Once the app is running, you should see a screen with About, Word Count Visualization, Sentiment Analysis, and Topic Model menu options across the top.
 7. You can either view our app in the default RStudio browser or open in your computer’s browser. To open in your computer’s browser, click on Open in Browser at the top left of our app screen. 
+<br /> 
 (Note: If you are having a difficulty opening our app, manually download and load packages listed at the top of server.R and ui.R.)
 
