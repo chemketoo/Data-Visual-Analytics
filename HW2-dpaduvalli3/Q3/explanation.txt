@@ -1,2 +1,0 @@
-2a. Budget vs. IMDb Rating is better at the separating the classes since classes looks less cluttered as data points are more scattered due to large Y scale.  
-2b. Sqrt Scale: useful for mapping large values to smaller domain. Log scale: useful when the data has an exponential nature.

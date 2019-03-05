@@ -1,7 +1,0 @@
-bigrams = LOAD 's3://cse6242oan-2018fall-aws-big/*' AS (bigram:chararray,year:int,occurrences:int,books:int);                                                         bigrams = FILTER bigrams BY (occurrences >= 300.0) AND (books >= 12.0);
-groupData = group bigrams BY bigram;
-groupData2 = FOREACH groupData GENERATE group, SUM(bigrams.occurrences), SUM(bigrams.books);
-gdr = FOREACH groupData2 GENERATE $0, $1/$2 + (double)($1%$2)/$2;
-orderGroupData2 = ORDER gdr BY $1 DESC, $0 ASC;
-result = LIMIT orderGroupData2 15;
-STORE result INTO 's3://cse6242oan-dpaduvalli3/output-big' USING PigStorage('\t');

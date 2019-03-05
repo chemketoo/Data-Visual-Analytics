@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Q4 dpaduvalli3</title>
+
+<style type="text/css">
+rect.tiled {
+stroke: #FFFFFF;
+stroke-width:1px;
+}
+text.labels {
+font-size: 10pt;
+font-family: sans-serif;
+fill: #000;
+}
+text.map {
+font-size: 10pt;
+font-family: sans-serif;
+font-weight: bold;
+}
+
+</style>
+
+<script src="../lib/d3.v3.min.js" charset="utf-8"></script>
+
+<body>
+<br>
+<center><h1 style="font-family:sans-serif;">Visualizing Wizarding Houses and Spells</h1></center>
+
+<center><div id="house" style="font-family:sans-serif;">House   </div></center>
+<center><div id="heatmap"></div></center>
+
+<script type="text/javascript"> 
+var data=[]
+var h1=[];
+var h2=[];
+var h3=[];
+var h4=[];
+
+var spelcolumn = {"Charm": 1, "Conjuration": 2, "Counter Spell": 3, "Curse": 4, "Healing Spell": 5, "Hex": 6, "Jinx": 7, "Transfiguration":8}
+d3.csv('heatmap.csv', function(d){
+hpdataset=[
+[book= 1,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Sorcerer's Stone"])],
+[book= 2,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Chamber of Secrets"])],
+[book= 3,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Prisoner of Azkaban"])],
+[book= 4,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Goblet of Fire"])],
+[book= 5,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Order of the Phoenix"])],
+[book= 6,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Half Blood Prince"])],
+[book= 7,
+speltype= spelcolumn[d.SpellType],
+house= d.House,
+value= parseInt(d["Deathly Hallows"])]];
+return hpdataset;},
+function(error, rows){
+data=rows;
+add_data(rows);
+});
+
+function add_data(poter_housedata){
+var s = ["Gryffindor", "Hufflepuff", "Ravenclaw","Slytherin"];
+var select = d3.select('#house')
+.append('select')
+.attr('class','select')
+.on('change',change)
+var options = select
+.selectAll('option')
+.data(s).enter()
+.append('option')
+.text(function (d) { return d; });
+for(var i=0;i<poter_housedata.length;i++){
+for(var j=0;j<7;j++){
+if(poter_housedata[i][j][2]== "Gryffindor"){
+temp={book:poter_housedata[i][j][0],speltype:poter_housedata[i][j][1], value:poter_housedata[i][j][3]}; h1.push(temp);}
+if(poter_housedata[i][j][2]=="Hufflepuff"){temp={book:poter_housedata[i][j][0],speltype:poter_housedata[i][j][1],value:poter_housedata[i][j][3]};h2.push(temp); }   
+if(poter_housedata[i][j][2]=="Ravenclaw"){temp={book:poter_housedata[i][j][0],speltype:poter_housedata[i][j][1],value:poter_housedata[i][j][3]};h3.push(temp);};
+if(poter_housedata[i][j][2]=="Slytherin"){temp={book:poter_housedata[i][j][0],speltype:poter_housedata[i][j][1],value:poter_housedata[i][j][3]};h4.push(temp); }
+
+}
+}
+heatmap(h1);
+};
+function change() {
+d3.select("svg").remove();
+HouseValue = d3.select('select').property('value')
+if(HouseValue== "Gryffindor"){heatmap(h1);}
+
+
+if(HouseValue=="Hufflepuff"){
+heatmap(h2);
+}
+if(HouseValue=="Ravenclaw"){
+heatmap(h3);
+}
+if(HouseValue=="Slytherin"){
+heatmap(h4);
+}
+
+};
+function heatmap(data){
+var margin = { top: 50, right: 0, bottom: 100, left: 100 },
+width = 960 - margin.left - margin.right,
+height = 530 - margin.top - margin.bottom,
+Grid_Size = Math.floor(width / 20),
+heatmapLegendWidth = Grid_Size,
+Bucket_Size = 9,
+colors=['#f7f4f9','#e7e1ef','#d4b9da','#c994c7','#df65b0','#e7298a','#ce1256','#980043','#67001f']            
+book = ["Sorcerer's Stone", "Chamber of Secrets", "Prisoner of Azkaban", "Goblet of Fire", "Order of the Phoenix", "Half Blood Prince", "Deathly Hallows"],
+speltype = ["Charm", "Conjuration", "Counter Spell", "Curse", "Healing Spell", "Hex", "Jinx", "Transfiguration"];
+
+var svg = d3.select("#heatmap").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left * 2.5 + "," + margin.top + ")");
+
+
+var BookLabels = svg.selectAll(".book_label")
+.data(book)
+.enter().append("text")
+.text(function (d) { return d; })
+.attr("x", 0)
+.attr("y", function (d, i) { return i * Grid_Size; })
+.style("text-anchor", "end")
+.attr("transform", "translate(-6," + Grid_Size / 1.5 + ")")     
+.attr("class", function (d, i) { return ((i >= 0 && i <= 6) ? "house_label labels axis axis-a" : "house_label labels axis"); });
+
+var SpeltypeLabels = svg.selectAll(".speltype_label")
+.data(speltype)
+.enter().append("text")
+.text(function(d) { return d; })
+.attr("x", function(d, i) { return i * Grid_Size; })
+.attr("y", Grid_Size*7 + 30)
+.style("text-anchor", "end")
+.attr("transform", function() {
+return "translate(" + Grid_Size / 2 + ", -22)," + "rotate(-90 " + d3.select(this).attr("x") + " " + d3.select(this).attr("y") + ")" })
+.attr("class", function(d, i) { return "speltype_label labels axis axis-b" });
+
+var heatmapcoloScale = d3.scale.quantile()
+.domain([0, Bucket_Size - 1, d3.max(data, function (d) { return d.value; })])
+.range(colors);
+
+svg.append("text")
+.text('Spell Type')
+.attr('class','book_label map axis axis-a')
+.attr('x',Grid_Size* 8.3)
+.attr('y',Grid_Size*8 - 20);
+
+svg.append("text")
+.text('No. of Spells')
+.attr('class','book_label map axis axis-a')
+.attr('x',0)
+.attr('y',Grid_Size*7 +110);
+
+
+svg.append("text")
+.text('Book')
+.attr('class','book_label map axis axis-a')
+.attr('x',-Grid_Size)
+.attr('y',-10);
+
+var tiles = svg.selectAll(".speltype")
+.data(data, function(d) {return d.book+':'+d.speltype;});
+
+tiles.append("title");
+tiles.enter().append("rect")
+.attr("x", function(d) { return (d.speltype - 1) * Grid_Size; })
+.attr("y", function(d) { return (d.book - 1) * Grid_Size; })
+.attr("rx", 4)
+.attr("ry", 4)
+.attr("class", "speltype tiled")
+.attr("width", Grid_Size)
+.attr("height", Grid_Size)
+.style("fill", colors[0]);
+
+tiles.transition().duration(1000).style("fill", function(d) { return heatmapcoloScale(d.value); });
+tiles.select("title").text(function(d) { return d.value; });
+tiles.exit().remove();
+
+var heatmapLegend = svg.selectAll(".heatmapLegend")
+.data([0].concat(heatmapcoloScale.quantiles()), function(d) { return d; });
+heatmapLegend.enter().append("g")
+.attr("class", "heatmapLegend");
+heatmapLegend.append("rect")
+.attr("x", function(d, i) { return heatmapLegendWidth * i; })
+.attr("y", height)
+.attr("width", heatmapLegendWidth)
+.attr("height", Grid_Size / 2+2)
+.style("fill", function(d, i) { return colors[i]; });
+heatmapLegend.append("text")
+.attr("class", "labels")
+.text(function(d) { return Math.round(d); })
+.attr("x", function(d, i) { return heatmapLegendWidth * i; })
+.attr("y", height-5);
+heatmapLegend.attr("transform", "translate(0, 53)")
+heatmapLegend.exit().remove();
+};
+</script>
+</body>
+</html>
