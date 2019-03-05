@@ -42,5 +42,5 @@ To Install RStudio:
 5. Next, click on Run App at the top right side of RStudio console (wait for a few seconds for the app to be rendered).
 6. Once the app is running, you should see a screen with About, Word Count Visualization, Sentiment Analysis, and Topic Model menu options across the top.
 7. You can either view our app in the default RStudio browser or open in your computer’s browser. To open in your computer’s browser, click on Open in Browser at the top left of our app screen. 
-(Note: If you are having a difficulty opening our app, mannually download and load packages listed at the top of server.R and ui.R.)
+(Note: If you are having a difficulty opening our app, manually download and load packages listed at the top of server.R and ui.R.)
 
