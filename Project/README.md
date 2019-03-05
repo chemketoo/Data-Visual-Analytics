@@ -1,4 +1,4 @@
-#DESCRIPTION:
+DESCRIPTION:
 Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
 
 #INSTALLATION:
