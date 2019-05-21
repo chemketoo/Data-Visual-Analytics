@@ -1,6 +1,8 @@
 # Description
 Our package allows users to evaluate and analyze the sentiment of product reviews. We used a static dataset of reviews from Amazon to build the models. Users will be able to manipulate graphs, sort the data by product name, average overall rating, average score and asin (amazon id number). 
 
+![gif](https://user-images.githubusercontent.com/46453741/58108619-2b2cca80-7bba-11e9-9e8b-9d4ee3882231.gif)
+
 # Installation
 Prerequisites: <br /> 
 In order to run our application, you will need to install R and R studio on your computer. Install the latest version of RStudio. 
