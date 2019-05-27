@@ -1,4 +1,4 @@
-# CSE-6242-Data-Visual-Analytics
+# CSE 6242 Data Visual Analytics
 This course introduced techniques and tools for analyzing and visualizing data at scale. 
 It emphasized how to combine computation and visualization to perform effective analysis. Topics covered included big data analytics building blocks, data collection and storage, data cleaning and integration, data visualization, dimensionality reduction, data mining concepts, and data analytics. 
 
