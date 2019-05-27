@@ -11,4 +11,6 @@ This course consisted 4 homework assignments and a group project. <br />
 
 **•	Assignment 4:** Scalable PageRank via Virtual Memory (MMap), Random Forest, Scikit-Learn (used Python) <br />
 
-**•	Group Project:** Created an interactive application based on a large data set of our choice (used Amazon Electronics data set) and applied data analytics concepts learnt in this course. Used R and Shiny to build the application.  
+**•	Group Project:** Created an interactive application based on a large data set of our choice (used Amazon Electronics data set) and applied data analytics concepts learnt in this course. Used R and Shiny to build the application. Below is a preview of the final application. 
+
+![gif](https://user-images.githubusercontent.com/46453741/58108619-2b2cca80-7bba-11e9-9e8b-9d4ee3882231.gif)
